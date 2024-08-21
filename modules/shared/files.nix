@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 
 let
-  githubPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOk8iAnIaa1deoc7jw8YACPNVka1ZFJxhnU4G74TmS+p dustin@Dustins-MBP.localdomain";
+  githubPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJIMi8C8kvLX6xc6/0iu0Z+61GL4Wd9FhXEgZAXMc7QZ senaint@gmail.com";
   githubPublicSigningKey = ''
     -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -48,19 +48,12 @@ let
 in
 
 {
-  # Initializes Emacs with org-mode so we can tangle the main config
-  #
-  # @todo: Get rid of this after we've upgraded to Emacs 29 on the Macbook
-  # Emacs 29 includes org-mode now
-  ".emacs.d/init.el" = {
-    text = builtins.readFile ./config/emacs/init.el;
-  };
 
   ".ssh/id_github.pub" = {
     text = githubPublicKey;
   };
 
-  ".ssh/pgp_github.pub" = {
-    text = githubPublicSigningKey;
-  };
+ # ".ssh/pgp_github.pub" = {
+ #   text = githubPublicSigningKey;
+ # };
 }

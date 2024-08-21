@@ -1,12 +1,8 @@
 { config, pkgs, lib, home-manager, ... }:
 
 let
-  user = "dustin";
+  user = "steklemichael";
   # Define the content of your file as a derivation
-  myEmacsLauncher = pkgs.writeScript "emacs-launcher.command" ''
-    #!/bin/sh
-      emacsclient -c -n &
-  '';
   sharedFiles = import ../shared/files.nix { inherit config pkgs; };
   additionalFiles = import ./files.nix { inherit user config pkgs; };
 in

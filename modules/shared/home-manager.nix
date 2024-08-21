@@ -1,10 +1,11 @@
 { config, pkgs, lib, ... }:
 
-let name = "Dustin Lyons";
-    user = "dustin";
-    email = "dustin@dlyons.dev"; in
+let 
+  name = "Senai Teklemichael";
+  user = "steklemichael";
+  email = "steklemichael@integralads.com"; 
+in
 {
-
   direnv = {
       enable = true;
       enableZshIntegration = true;
@@ -53,20 +54,6 @@ let name = "Dustin Lyons";
       # Ripgrep alias
       alias search='rg -p --glob "!node_modules/*" --glob "!vendor/*" "$@"'
 
-      # Emacs is my editor
-      export ALTERNATE_EDITOR=""
-      export EDITOR="emacsclient -t"
-      export VISUAL="emacsclient -c -a emacs"
-      e() {
-          emacsclient -t "$@"
-      }
-
-      # Laravel Artisan
-      alias art='php artisan'
-
-      # PHP Deployer
-      alias deploy='dep deploy'
-
       alias watch="tmux new-session -d -s watch-session 'bash ./bin/watch.sh'"
       alias unwatch='tmux kill-session -t watch-session'
 
@@ -95,7 +82,7 @@ let name = "Dustin Lyons";
 	    editor = "vim";
         autocrlf = "input";
       };
-      commit.gpgsign = true;
+      commit.gpgsign = false;
       pull.rebase = true;
       rebase.autoStash = true;
     };
@@ -103,7 +90,7 @@ let name = "Dustin Lyons";
 
   vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes copilot-vim vim-startify vim-tmux-navigator ];
+    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes copilot-vim vim-startify ];
     settings = { ignorecase = true; };
     extraConfig = ''
       "" General
@@ -211,63 +198,6 @@ let name = "Dustin Lyons";
       '';
      };
 
-  alacritty = {
-    enable = true;
-    settings = {
-      cursor = {
-        style = "Block";
-      };
-
-      window = {
-        opacity = 1.0;
-        padding = {
-          x = 24;
-          y = 24;
-        };
-      };
-
-      font = {
-        normal = {
-          family = "MesloLGS NF";
-          style = "Regular";
-        };
-        size = lib.mkMerge [
-          (lib.mkIf pkgs.stdenv.hostPlatform.isLinux 10)
-          (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin 14)
-        ];
-      };
-
-      colors = {
-        primary = {
-          background = "0x1f2528";
-          foreground = "0xc0c5ce";
-        };
-
-        normal = {
-          black = "0x1f2528";
-          red = "0xec5f67";
-          green = "0x99c794";
-          yellow = "0xfac863";
-          blue = "0x6699cc";
-          magenta = "0xc594c5";
-          cyan = "0x5fb3b3";
-          white = "0xc0c5ce";
-        };
-
-        bright = {
-          black = "0x65737e";
-          red = "0xec5f67";
-          green = "0x99c794";
-          yellow = "0xfac863";
-          blue = "0x6699cc";
-          magenta = "0xc594c5";
-          cyan = "0x5fb3b3";
-          white = "0xd8dee9";
-        };
-      };
-    };
-  };
-
   ssh = {
     enable = true;
     includes = [
@@ -293,87 +223,62 @@ let name = "Dustin Lyons";
     };
   };
 
-  tmux = {
-    enable = true;
-    plugins = with pkgs.tmuxPlugins; [
-      vim-tmux-navigator
-      sensible
-      yank
-      prefix-highlight
-      {
-        plugin = power-theme;
-        extraConfig = ''
-           set -g @tmux_power_theme 'gold'
-        '';
-      }
-      {
-        plugin = resurrect; # Used by tmux-continuum
+  # Home Manager configuration for dotfiles
+  home.file = {
+    # Bat configuration
+    ".config/bat/config".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/bat/config";
+    ".config/bat/themes/Catppuccin Frappe.tmTheme".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/bat/themes/Catppuccin Frappe.tmTheme";
+    ".config/bat/themes/Catppuccin Latte.tmTheme".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/bat/themes/Catppuccin Latte.tmTheme";
+    ".config/bat/themes/Catppuccin Macchiato.tmTheme".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/bat/themes/Catppuccin Macchiato.tmTheme";
+    ".config/bat/themes/Catppuccin Mocha.tmTheme".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/bat/themes/Catppuccin Mocha.tmTheme";
 
-        # Use XDG data directory
-        # https://github.com/tmux-plugins/tmux-resurrect/issues/348
-        extraConfig = ''
-          set -g @resurrect-dir '/Users/dustin/.cache/tmux/resurrect'
-          set -g @resurrect-capture-pane-contents 'on'
-          set -g @resurrect-pane-contents-area 'visible'
-        '';
-      }
-      {
-        plugin = continuum;
-        extraConfig = ''
-          set -g @continuum-restore 'on'
-          set -g @continuum-save-interval '5' # minutes
-        '';
-      }
-    ];
-    terminal = "screen-256color";
-    prefix = "C-x";
-    escapeTime = 10;
-    historyLimit = 50000;
-    extraConfig = ''
-      # Remove Vim mode delays
-      set -g focus-events on
+    # Btop configuration
+    ".config/btop/btop.conf".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/btop/btop.conf";
 
-      # Enable full mouse support
-      set -g mouse on
+    # Fish shell configuration
+    ".config/fish/config.fish".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/fish/config.fish";
+    ".config/fish/fish_plugins".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/fish/fish_plugins";
+    ".config/fish/fish_variables".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/fish/fish_variables";
+    ".config/fish/conf.d".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/fish/conf.d";
+    ".config/fish/functions".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/fish/functions";
 
-      # -----------------------------------------------------------------------------
-      # Key bindings
-      # -----------------------------------------------------------------------------
+    # FZF configuration
+    ".config/fzf/fzf".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/fzf/fzf";
 
-      # Unbind default keys
-      unbind C-b
-      unbind '"'
-      unbind %
+    # GitHub CLI configuration
+    ".config/gh/config.yml".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/gh/config.yml";
+    ".config/gh/hosts.yml".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/gh/hosts.yml";
 
-      # Split panes, vertical or horizontal
-      bind-key x split-window -v
-      bind-key v split-window -h
+    # Ripgrep configuration
+    ".config/ripgrep/ripgrep".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/ripgrep/ripgrep";
 
-      # Move around panes with vim-like bindings (h,j,k,l)
-      bind-key -n M-k select-pane -U
-      bind-key -n M-h select-pane -L
-      bind-key -n M-j select-pane -D
-      bind-key -n M-l select-pane -R
+    # Wezterm configuration
+    ".config/wezterm/wezterm.lua".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/wezterm/wezterm.lua";
 
-      # Smart pane switching with awareness of Vim splits.
-      # This is copy paste from https://github.com/christoomey/vim-tmux-navigator
-      is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
-        | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
-      bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
-      bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
-      bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
-      bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
-      tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
-      if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
-        "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
-      if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
-        "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+    # Zellij configuration
+    ".config/zellij/config.kdl".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/zellij/config.kdl";
+    ".config/zellij/themes/catppuccin.kdl".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/zellij/themes/catppuccin.kdl";
+    ".config/zellij/themes/catppuccin.yaml".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/zellij/themes/catppuccin.yaml";
 
-      bind-key -T copy-mode-vi 'C-h' select-pane -L
-      bind-key -T copy-mode-vi 'C-j' select-pane -D
-      bind-key -T copy-mode-vi 'C-k' select-pane -U
-      bind-key -T copy-mode-vi 'C-l' select-pane -R
-      bind-key -T copy-mode-vi 'C-\' select-pane -l
-      '';
-    };
+    # Starship configuration
+    ".config/starship/starship.toml".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/starship/starship.toml";
+
+    # Neovim configuration
+    ".config/nvim/init.lua".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/nvim/init.lua";
+    ".config/nvim/lazy-lock.json".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/nvim/lazy-lock.json";
+    ".config/nvim/lua".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/nvim/lua";
+    ".config/nvim/spell/en.utf-8.add".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/nvim/spell/en.utf-8.add";
+    ".config/nvim/spell/en.utf-8.add.spl".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/nvim/spell/en.utf-8.add.spl";
+
+    # K9s configuration
+    ".config/k9s/config.yml".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/k9s/config.yml";
+    ".config/k9s/skin.yml".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/k9s/skin.yml";
+
+    # Mise configuration
+    ".config/mise/config.toml".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/mise/config.toml";
+
+    # Chezmoi state file
+    # ".local/share/chezmoi/chezmoistate.boltdb".source = "${config.home.homeDirectory}/nixos-config/modules/shared/config/chezmoi/chezmoistate.boltdb";
+
+  };
 }
