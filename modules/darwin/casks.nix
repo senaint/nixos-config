@@ -5,13 +5,10 @@ _:
   "homebrew/cask/docker"
   "insomnia"
   "ngrok"
-  "postico"
   "visual-studio-code"
 
   # Communication Tools
-  "discord"
   "loom"
-  "notion"
   "slack"
   "zoom"
 

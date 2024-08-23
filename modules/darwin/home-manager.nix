@@ -16,7 +16,7 @@ in
     name = "${user}";
     home = "/Users/${user}";
     isHidden = false;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
 
   homebrew = {
@@ -33,12 +33,11 @@ in
     # $ mas search <app name>
     #
     masApps = {
-      "1password" = 1333542190;
+      "alfred" = 405843582;
+      "capcut" = 1500855883;
       "canva" = 897446215;
       "drafts" = 1435957248;
       "hidden-bar" = 1452453066;
-      "wireguard" = 1451685025;
-      "yoink" = 457622435;
     };
   };
 
@@ -71,18 +70,8 @@ in
     dock.enable = true;
     dock.entries = [
       { path = "/Applications/Slack.app/"; }
-      { path = "/System/Applications/Messages.app/"; }
-      { path = "/System/Applications/Facetime.app/"; }
-      { path = "/Applications/Telegram.app/"; }
-      { path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
-      { path = "/System/Applications/Music.app/"; }
-      { path = "/System/Applications/News.app/"; }
       { path = "/System/Applications/Photos.app/"; }
-      { path = "/System/Applications/Photo Booth.app/"; }
-      { path = "/System/Applications/TV.app/"; }
-      { path = "${pkgs.jetbrains.phpstorm}/Applications/PhpStorm.app/"; }
-      { path = "/Applications/TablePlus.app/"; }
-      { path = "/Applications/Asana.app/"; }
+      { path = "/Applications/alfred.app/"; }
       { path = "/Applications/Drafts.app/"; }
       { path = "/System/Applications/Home.app/"; }
       {
